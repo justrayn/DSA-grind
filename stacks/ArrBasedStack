@@ -1,0 +1,95 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#define MAX 10
+
+typedef int Data;
+typedef struct {
+    Data elem[MAX];
+    int top;
+}Stack;
+
+void initStack(Stack *);
+bool push(Stack *,Data);
+bool pop(Stack *);
+Data peek(Stack);
+bool isFull(Stack);
+bool isEmpty(Stack);
+void displayStack(Stack);
+void visualize(Stack);
+
+int main(){
+    Stack s;
+    initStack(&s);
+
+    // Push 3 elements
+    push(&s, 1);
+    push(&s, 2);
+    visualize(s);
+    
+    return 0;
+}
+
+void initStack(Stack *s){
+   s->top = -1;
+}
+
+bool isEmpty(Stack a){
+    return a.top == -1;
+}
+
+bool isFull(Stack a){
+   return a.top == MAX-1;
+}
+
+bool push(Stack *s, Data elem){
+    if(isFull(*s)){
+        printf("\nstack full!\n");
+        return false;
+    }
+
+    s->elem[++(s->top)] = elem;
+    return true;
+}
+
+bool pop(Stack *s){
+    if(isEmpty(*s)){
+        printf("theres nothing inside the stack");
+        return false;
+    }
+    (s->top)--;
+    return true;
+}
+
+Data peek(Stack s){
+    if(isEmpty(s)){
+        printf("nothing to peek");
+        return 0;
+    }
+    return s.elem[s.top];
+}
+
+void displayStack(Stack s){
+    
+}
+
+void visualize(Stack s) {
+   if(isEmpty(s)){
+    printf("stack is empty oi!!!");
+    return;
+   }
+
+   for(int i = MAX -1; i >= 0; i--){
+    if(i > s.top){
+        printf("???\n");
+    }
+    if(i == s.top){
+        printf("%d\n", s.elem[s.top]);
+    }
+    if(i < s.top){
+        printf("x\n");
+    }
+   }
+}
+
