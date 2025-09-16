@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#define MAX 5
+
+typedef struct Node{
+    int elem;
+    struct Node *next;
+}nodeType, *topL;
+
+void initStack(topL *s);
+bool isEmpty(topL s);
+int top(topL s);
+void pop(topL *s);
+void push(topL *s, int elem);
+void visualize(topL s);
+
+
+int main(){
+
+    topL stack;
+    initStack(&stack);
+    
+    push(&stack, 1);
+    push(&stack, 2);
+    visualize(stack);
+
+    return 0;
+}
+
+void initStack(topL *s){
+    *s = NULL;
+}
+
+bool isEmpty(topL s){
+    return s == NULL;
+}
+
+void pop(topL *s){
+    topL temp = *s;
+    if(*s != NULL){
+        *s = temp->next;
+        free(temp);
+    }
+
+}
+
+void push(topL *s, int elem){
+    topL newD = malloc(sizeof(nodeType));
+    if(newD == NULL){
+        printf("mem failed");
+        return;
+    }
+    newD->elem = elem;
+    newD->next = *s;
+    *s = newD;
+}
+
+void visualize(topL s){
+    if(isEmpty(s)){
+        printf("stack is empty\n");
+        return;
+    }
+    int count = 0;
+    printf("Front -> ");
+    while(s){
+        if(count == 0){
+            printf("%d ", s->elem);
+        } else if(count == 1){
+            printf("x ");
+        }
+        if(s->next != NULL){
+            printf("-> ");
+        }
+        s = s->next;
+        count++;
+    }
+
+    printf("-> Rear\n");
+}
