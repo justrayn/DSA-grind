@@ -1,8 +1,7 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <stdbool.h>
-#define MAX 10
+#include <stdlib.h>
+#define MAX 5
 
 typedef int Data;
 typedef struct {
@@ -11,85 +10,96 @@ typedef struct {
 }Stack;
 
 void initStack(Stack *);
-bool push(Stack *,Data);
-bool pop(Stack *);
-Data peek(Stack);
-bool isFull(Stack);
 bool isEmpty(Stack);
-void displayStack(Stack);
+bool isFull(Stack);
+Data peek(Stack);
+void push(Stack *, Data);
+void pop(Stack*);
 void visualize(Stack);
+void removeNeg(Stack *s, Stack *r);
 
 int main(){
-    Stack s;
+    Stack r, s;
+    initStack(&r);
     initStack(&s);
-
-    // Push 3 elements
-    push(&s, 1);
+    push(&s, -10);
+    push(&s, 10);
     push(&s, 2);
+    push(&s, -20);
+    push(&s, 1);
+    printf("before remobing anything\n");
     visualize(s);
+    removeNeg(&s, &r);
+    printf("afte remobing something\n");
+    pop(&s);
     
-    return 0;
+    visualize(s);
 }
 
 void initStack(Stack *s){
-   s->top = -1;
+    s->top = -1;
 }
 
-bool isEmpty(Stack a){
-    return a.top == -1;
+bool isEmpty(Stack s){
+    return s.top == -1;
 }
 
-bool isFull(Stack a){
-   return a.top == MAX-1;
-}
-
-bool push(Stack *s, Data elem){
-    if(isFull(*s)){
-        printf("\nstack full!\n");
-        return false;
-    }
-
-    s->elem[++(s->top)] = elem;
-    return true;
-}
-
-bool pop(Stack *s){
-    if(isEmpty(*s)){
-        printf("theres nothing inside the stack");
-        return false;
-    }
-    (s->top)--;
-    return true;
+bool isFull(Stack s){
+    return s.top == MAX -1;
 }
 
 Data peek(Stack s){
-    if(isEmpty(s)){
-        printf("nothing to peek");
-        return 0;
-    }
     return s.elem[s.top];
 }
 
-void displayStack(Stack s){
-    
+void push(Stack *s, Data elem){
+    if(isFull(*s)){
+        printf("The stack...\nTHE STACKK IS FULL!!!!");
+        return;
+    }
+    s->elem[++s->top] = elem;
 }
 
-void visualize(Stack s) {
-   if(isEmpty(s)){
-    printf("stack is empty oi!!!");
-    return;
-   }
-
-   for(int i = MAX -1; i >= 0; i--){
-    if(i > s.top){
-        printf("???\n");
+void pop(Stack*s){
+    if(isEmpty(*s)){
+        printf("The stack...\nTHE STACKK IS EMPTY!!!!");
+        return;
     }
-    if(i == s.top){
-        printf("%d\n", s.elem[s.top]);
-    }
-    if(i < s.top){
-        printf("x\n");
-    }
-   }
+    (s->top)--;
 }
 
+void visualize(Stack s){
+    for(int i = MAX -1; i >= 0; i--){
+        if(i > s.top){
+            printf("???\n");
+        }
+
+        if(i == s.top){
+            printf("%d -> top\n", s.elem[s.top]);
+        }
+
+        if(i < s.top){
+            printf("x\n");
+        }
+    }
+}
+
+void removeNeg(Stack *s, Stack *r){
+    Stack temp;
+    initStack(&temp);
+    while(!isEmpty(*s)){
+        Data top = peek(*s);
+        pop(s);
+        if(top >= 0){
+            push(&temp, top);
+        } else {
+            push(r, top);
+        }
+    }
+
+    while(!isEmpty(temp)){
+        Data top = peek(temp);
+        pop(&temp);
+        push(s, top);
+    }
+}
