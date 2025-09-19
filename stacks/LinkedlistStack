@@ -23,8 +23,8 @@ int main(){
     push(&stack, 21);
     push(&stack, 10);
     visualize(stack);
-    removeD(&stack, 21);
-    printf("after removing\n");
+    SortStack(&stack);
+    printf("after sorting\n");
     visualize(stack);
 
 
@@ -87,4 +87,23 @@ void removeD(topL*s, int elem){
         
     }
 }
-void SortStack(topL*);
+void SortStack(topL*s){
+    topL temp;
+    initStack(&temp);
+
+    while(!isEmpty(*s)){
+        int curr = peek(*s);
+        pop(s);
+        while(!isEmpty(temp) && peek(temp) > curr){
+            push(s, peek(temp));
+            pop(&temp);
+        }
+        push(&temp, curr);
+    }
+
+    while(!isEmpty(temp)){
+        int val = peek(temp);
+        pop(&temp);
+        push(s, val);
+    }
+}
