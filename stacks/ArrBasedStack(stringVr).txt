@@ -19,16 +19,19 @@ char *peek(Stack *);
 void push(Stack*, Data);
 void pop(Stack*);
 void visualize(Stack);
+void removeAhero(Stack *s, Stack *r, Data hero);
 
 
 int main(){
 
-    Stack s;
+    Stack s, r;
     initStack(&s);
+    initStack(&r);
     push(&s, "E soul");
     push(&s, "vortex");
     push(&s, "Phobia clone");
     push(&s, "Hero x");
+    removeAhero(&s, &r,"Hero x");
     visualize(s);
     return 0;
 }
@@ -73,7 +76,27 @@ void visualize(Stack s){
             printf("%s <- current top X\n", s.elem[i]);
         }
          if(i < s.top){
-            printf("x\n");
+             printf("%s\n", s.elem[i]);
         }
+    }
+}
+
+void removeAhero(Stack *s, Stack *r, Data hero){
+    Stack temp;
+    initStack(&temp);
+    while(!isEmpty(*s)){
+        char top[STR_LEN];
+        strcpy(top, peek(s));
+        pop(s);
+        if(strcmp(top, hero) == 0){
+            push(r, top);
+        } else {
+            push(&temp, top);
+        }
+    }
+
+    while(!isEmpty(temp)){
+        push(s, peek(&temp));
+        pop(&temp);
     }
 }
