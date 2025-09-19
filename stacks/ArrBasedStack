@@ -1,11 +1,12 @@
 #include <stdio.h>
-#include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 #define MAX 5
 
 typedef int Data;
-typedef struct {
-    Data elem[MAX];
+typedef struct{
+    Data Elem[MAX];
     int top;
 }Stack;
 
@@ -14,26 +15,27 @@ bool isEmpty(Stack);
 bool isFull(Stack);
 Data peek(Stack);
 void push(Stack *, Data);
-void pop(Stack*);
+void pop(Stack *);
 void visualize(Stack);
-void removeNeg(Stack *s, Stack *r);
+void removeNeg(Stack*, Stack*);
+void sortStack(Stack *);
+
 
 int main(){
-    Stack r, s;
+    Stack s, r;
     initStack(&r);
     initStack(&s);
-    push(&s, -10);
-    push(&s, 10);
-    push(&s, 2);
-    push(&s, -20);
-    push(&s, 1);
-    printf("before remobing anything\n");
+    push(&s, 6);
+    push(&s, 4);
+    push(&s, 9);
+    push(&s, 5);
     visualize(s);
-    removeNeg(&s, &r);
-    printf("afte remobing something\n");
-    pop(&s);
-    
+    sortStack(&s);
     visualize(s);
+
+
+
+    return 0;
 }
 
 void initStack(Stack *s){
@@ -49,23 +51,26 @@ bool isFull(Stack s){
 }
 
 Data peek(Stack s){
-    return s.elem[s.top];
+    if(isEmpty(s)){
+        return 0;
+    }
+    return s.Elem[s.top];
 }
 
 void push(Stack *s, Data elem){
     if(isFull(*s)){
-        printf("The stack...\nTHE STACKK IS FULL!!!!");
+        printf("Full!\n");
         return;
     }
-    s->elem[++s->top] = elem;
+
+    s->Elem[++s->top] = elem;
 }
 
-void pop(Stack*s){
+void pop(Stack *s){
     if(isEmpty(*s)){
-        printf("The stack...\nTHE STACKK IS EMPTY!!!!");
         return;
     }
-    (s->top)--;
+    s->top--;
 }
 
 void visualize(Stack s){
@@ -74,19 +79,20 @@ void visualize(Stack s){
             printf("???\n");
         }
 
-        if(i == s.top){
-            printf("%d -> top\n", s.elem[s.top]);
+        if(i <= s.top){
+            printf("%d\n",s.Elem[i]);
         }
 
-        if(i < s.top){
-            printf("x\n");
-        }
+        // if(i < s.top){
+        //     printf("x\n");
+        // }
     }
 }
 
-void removeNeg(Stack *s, Stack *r){
+void removeNeg(Stack*s, Stack*r){
     Stack temp;
     initStack(&temp);
+
     while(!isEmpty(*s)){
         Data top = peek(*s);
         pop(s);
@@ -97,9 +103,30 @@ void removeNeg(Stack *s, Stack *r){
         }
     }
 
-    while(!isEmpty(temp)){
+     while(!isEmpty(temp)){
         Data top = peek(temp);
         pop(&temp);
         push(s, top);
+     }
+}
+
+
+void sortStack(Stack *s){
+    Stack temp;
+    initStack(&temp);
+
+    while(!isEmpty(*s)){
+        Data curr = peek(*s);
+        pop(s);
+        while(!isEmpty(temp) && peek(temp) < curr){
+            push(s, peek(temp));
+            pop(&temp);
+        }
+        push(&temp, curr);
+    }
+
+    while(!isEmpty(temp)){
+        push(s, peek(temp));
+        pop(&temp);
     }
 }
