@@ -1,81 +1,90 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <stdbool.h>
-#define MAX 5
+#include <string.h>
+#include <stdlib.h>
 
 typedef struct Node{
-    int elem;
-    struct Node *next;
-}nodeType, *topL;
+    int Data;
+    struct Node*next;
+}*topL, NodeType;
 
-void initStack(topL *s);
-bool isEmpty(topL s);
-int top(topL s);
-void pop(topL *s);
-void push(topL *s, int elem);
-void visualize(topL s);
-
-
+void initStack(topL*);
+bool isEmpty(topL);
+void push(topL*, int);
+void pop(topL*);
+int peek(topL);
+void visualize(topL);
+void removeD(topL*, int);
+void SortStack(topL*);
 int main(){
-
     topL stack;
     initStack(&stack);
-    
-    push(&stack, 1);
-    push(&stack, 2);
+    push(&stack, 7);
+    push(&stack, 21);
+    push(&stack, 10);
     visualize(stack);
+    removeD(&stack, 21);
+    printf("after removing\n");
+    visualize(stack);
+
+
 
     return 0;
 }
 
-void initStack(topL *s){
+
+void initStack(topL*s){
     *s = NULL;
 }
-
 bool isEmpty(topL s){
     return s == NULL;
 }
-
-void pop(topL *s){
+void push(topL*s, int elem){
+    topL newD = malloc(sizeof(NodeType));
+    if(newD == NULL){
+        return;
+    }
+    newD->Data = elem;
+    newD->next  = *s;
+    *s = newD;
+}
+void pop(topL*s){
     topL temp = *s;
-    if(*s != NULL){
+    if(!isEmpty(*s)){
         *s = temp->next;
         free(temp);
     }
 
 }
-
-void push(topL *s, int elem){
-    topL newD = malloc(sizeof(nodeType));
-    if(newD == NULL){
-        printf("mem failed");
-        return;
-    }
-    newD->elem = elem;
-    newD->next = *s;
-    *s = newD;
-}
-
 void visualize(topL s){
-    if(isEmpty(s)){
-        printf("stack is empty\n");
-        return;
-    }
-    int count = 0;
     printf("Front -> ");
-    while(s){
-        if(count == 0){
-            printf("%d ", s->elem);
-        } else if(count == 1){
-            printf("x ");
-        }
-        if(s->next != NULL){
-            printf("-> ");
-        }
+    while(!isEmpty(s)){
+        printf("%d -> ", s->Data);
         s = s->next;
-        count++;
     }
 
-    printf("-> Rear\n");
+    printf("rear\n");
 }
+
+int peek(topL s){
+    return s->Data;
+}
+void removeD(topL*s, int elem){
+    topL temp;
+    initStack(&temp);
+    while(!isEmpty(*s)){
+        int top = peek(*s);
+        pop(s);
+        if(top != elem){
+            push(&temp, top);
+        }
+    }
+
+     while(!isEmpty(temp)){
+        int val = peek(temp);
+        pop(&temp);
+        push(s, val);
+        
+    }
+}
+void SortStack(topL*);
