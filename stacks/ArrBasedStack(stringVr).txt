@@ -1,0 +1,79 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define MAX 5
+#define STR_LEN 50
+
+typedef char Data[STR_LEN];
+typedef struct {
+    Data elem[MAX];
+    int top;
+} Stack;
+
+void initStack(Stack *);
+bool isEmpty(Stack);
+bool isFull(Stack);
+char *peek(Stack *);
+void push(Stack*, Data);
+void pop(Stack*);
+void visualize(Stack);
+
+
+int main(){
+
+    Stack s;
+    initStack(&s);
+    push(&s, "E soul");
+    push(&s, "vortex");
+    push(&s, "Phobia clone");
+    push(&s, "Hero x");
+    visualize(s);
+    return 0;
+}
+
+void initStack(Stack *s){
+    s->top = -1;
+}
+bool isEmpty(Stack s){
+    return s.top == -1;
+}
+bool isFull(Stack s){
+    return s.top == MAX -1;
+}
+char *peek(Stack *s){
+    if(isEmpty(*s)){
+        printf("theres no Hero X anymore\n");
+        return NULL;
+    }
+    return s->elem[s->top];
+}
+void push(Stack* s, Data elem){
+    if(isFull(*s)){
+        printf("the tournament is next year!\n");
+        return;
+    }
+    strcpy(s->elem[++s->top], elem);
+}
+void pop(Stack*s){
+    if(isEmpty(*s)){
+        printf("no hero recorded yet!\n");
+        return;
+    }
+    s->top--;
+}
+void visualize(Stack s){
+    for(int i = MAX -1; i >= 0; i--){
+        if(i > s.top){
+            printf("???\n");
+        }
+
+        if(i == s.top){
+            printf("%s <- current top X\n", s.elem[i]);
+        }
+         if(i < s.top){
+            printf("x\n");
+        }
+    }
+}
