@@ -53,3 +53,16 @@ int dequeue(Queue *q) {
     q->front = (q->front + 1) % MAX;
     return val;
 }
+
+void display(Queue *q) {
+    if(isEmpty(q)) {
+        printf("Queue is empty!\n");
+        return;
+    }
+
+   for (int i = q->front; ; i = (i + 1) % MAX) {
+    printf("%d ", q->items[i]);
+    if (i == q->rear) break;
+    }
+}
+
